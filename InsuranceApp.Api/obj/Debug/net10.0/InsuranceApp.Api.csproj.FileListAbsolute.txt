@@ -132,3 +132,4 @@
 /Users/admin/Documents/InsuranceApp/InsuranceApp.Api/obj/Debug/net10.0/InsuranceApp.Api.pdb
 /Users/admin/Documents/InsuranceApp/InsuranceApp.Api/obj/Debug/net10.0/InsuranceApp.Api.genruntimeconfig.cache
 /Users/admin/Documents/InsuranceApp/InsuranceApp.Api/obj/Debug/net10.0/ref/InsuranceApp.Api.dll
+/Users/admin/Documents/InsuranceApp/InsuranceApp.Api/obj/Debug/net10.0/InsuranceApp.Api.sourcelink.json
