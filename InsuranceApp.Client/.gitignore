@@ -8,3 +8,4 @@ appsettings.Development.json
 .env.local
 .vscode/
 .DS_Store
+**/.DS_Store
