@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-policy.WithOrigins(
+            policy.WithOrigins(
                 "http://localhost:5173",
                 "https://insurance-app-xi.vercel.app",
                 "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app"
