@@ -17,7 +17,9 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "http://localhost:5173",
-                "https://your-vercel-app.vercel.app")
+                "https://insurance-app-xi.vercel.app",
+                "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app"
+            )
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
