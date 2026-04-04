@@ -60,23 +60,6 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.Use(async (context, next) =>
-{
-    if (context.Request.Method == "OPTIONS")
-    {
-        context.Response.StatusCode = 200;
-        await context.Response.CompleteAsync();
-        return;
-    }
-    await next();
-});
-
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/openapi/v1.json", "Insurance API v1"));
-}
-
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
