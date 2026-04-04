@@ -15,14 +15,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:5173",
-                "https://insurance-app-xi.vercel.app",
-                "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app"
-            )
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy
+            .SetIsOriginAllowed(origin =>
+                origin == "http://localhost:5173" ||
+                origin == "https://insurance-app-xi.vercel.app" ||
+                origin == "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -68,6 +68,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
