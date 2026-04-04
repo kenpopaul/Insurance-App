@@ -1,0 +1,26 @@
+# Build output
+**/bin/
+**/obj/
+
+# Compiled files
+*.dll
+*.pdb
+*.cache
+
+# User-specific files
+*.user
+
+# Environment / config
+appsettings.Development.json
+.env
+.env.local
+
+# Node / frontend
+**/node_modules/
+**/dist/
+
+# IDE / OS
+.vscode/
+.DS_Store
+**/.DS_Store
+.vs/
