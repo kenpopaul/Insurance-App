@@ -43,17 +43,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                if (context.Request.Cookies.ContainsKey("token"))
-                {
-                    context.Token = context.Request.Cookies["token"];
-                }
-                return Task.CompletedTask;
-            }
-        };
     });
 
 builder.Services.AddAuthorization();
@@ -73,10 +62,11 @@ var app = builder.Build();
 
 app.Use(async (context, next) =>
 {
-    var origin = context.Request.Headers["Origin"].ToString();
-    if (!string.IsNullOrEmpty(origin))
+    if (context.Request.Method == "OPTIONS")
     {
-        Console.WriteLine($"Incoming request from Origin: {origin}");
+        context.Response.StatusCode = 200;
+        await context.Response.CompleteAsync();
+        return;
     }
     await next();
 });
