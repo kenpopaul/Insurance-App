@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Plus, Search, Trash2, Eye, AlertTriangle } from "lucide-react";
 import { clientsApi } from "../../api/clients";
+import { policiesApi } from "../../api/policies";
+import { claimsApi } from "../../api/claims";
 import type { CreateClientDto } from "../../types/index";
 import Layout from "../../components/Layout";
 
@@ -32,6 +34,16 @@ export default function ClientsPage() {
   const { data: clients = [], isLoading } = useQuery({
     queryKey: ["clients"],
     queryFn: clientsApi.getAll,
+  });
+
+  const { data: policies = [] } = useQuery({
+    queryKey: ["policies"],
+    queryFn: policiesApi.getAll,
+  });
+
+  const { data: claims = [] } = useQuery({
+    queryKey: ["claims"],
+    queryFn: claimsApi.getAll,
   });
 
   const createMutation = useMutation({
@@ -94,6 +106,34 @@ export default function ClientsPage() {
             <Plus size={16} />
             Add client
           </button>
+        </div>
+
+        {/* Stats bar */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white border border-gray-200 rounded-xl p-4">
+            <p className="text-sm text-gray-500 mb-1">Total clients</p>
+            <p className="text-2xl font-bold text-gray-900">{clients.length}</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-4">
+            <p className="text-sm text-gray-500 mb-1">Total policies</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {policies.length}
+            </p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-4">
+            <p className="text-sm text-gray-500 mb-1">Total claims</p>
+            <p className="text-2xl font-bold text-gray-900">{claims.length}</p>
+          </div>
+          <div className="bg-white border border-gray-200 rounded-xl p-4">
+            <p className="text-sm text-gray-500 mb-1">High risk clients</p>
+            <p className="text-2xl font-bold text-red-600">
+              {
+                clients.filter(
+                  (c) => c.riskLevel === "High" || c.riskLevel === "Critical",
+                ).length
+              }
+            </p>
+          </div>
         </div>
 
         {/* Search */}
