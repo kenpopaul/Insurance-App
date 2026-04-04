@@ -16,11 +16,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins(
-                "http://localhost:5173",
-                "https://insurance-app-xi.vercel.app",
-                "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app"
-            )
+            .SetIsOriginAllowed(origin =>
+                origin == "http://localhost:5173" ||
+                origin == "https://insurance-app-xi.vercel.app" ||
+                origin == "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -42,6 +41,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context => 
+            {
+                context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                return Task.CompletedTask;
+            }
         };
     });
 
