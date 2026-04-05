@@ -15,14 +15,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy
-            .SetIsOriginAllowed(origin =>
-                origin == "http://localhost:5173" ||
-                origin == "https://insurance-app-xi.vercel.app" ||
-                origin == "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+        policy.WithOrigins(
+                "http://localhost:5173",
+                "https://insurance-app-xi.vercel.app",
+                "https://insurance-h4e9gwxzo-kenpopauls-projects.vercel.app")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -42,14 +41,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context => 
-            {
-                context.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                return Task.CompletedTask;
-            }
-        };
     });
 
 builder.Services.AddAuthorization();
@@ -67,10 +58,12 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+app.MapOpenApi();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/openapi/v1.json", "Insurance API v1"));
+
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
