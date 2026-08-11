@@ -9,7 +9,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(ConnectionStringHelper.Normalize(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
 builder.Services.AddCors(options =>
 {
