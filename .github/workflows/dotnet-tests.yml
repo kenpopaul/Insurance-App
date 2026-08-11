@@ -1,0 +1,40 @@
+name: .NET Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore InsuranceApp.slnx
+
+      - name: Build
+        run: dotnet build InsuranceApp.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test InsuranceApp.slnx --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          path: '**/test-results.trx'
+          reporter: dotnet-trx
